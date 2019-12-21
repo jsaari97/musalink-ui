@@ -5,7 +5,6 @@ import axios from "axios";
 import { ResultCard } from "./components/Result";
 import * as qs from "query-string";
 import vibrant from "node-vibrant";
-import styled from "styled-components";
 import { animated, useTransition } from "react-spring";
 import Spinner from "react-md-spinner";
 
@@ -21,10 +20,6 @@ export interface Result {
 
 const validateInput = (input: string): boolean =>
   !!input.match(/(open\.spotify|deezer\.com)/);
-
-const Background = styled(Flex)<{ gradient: string }>`
-  background: ${props => props.gradient};
-`;
 
 const initialQuery = (): string => {
   const q = qs.parse(window.location.search);
@@ -46,17 +41,17 @@ const App: React.FC = () => {
   const [result, setResult] = React.useState<Result | null>(null);
   const [isValid, setValid] = React.useState<boolean>(validateInput(value));
   const [loading, setLoading] = React.useState<boolean>(false);
-  const [buttonColor, setButtonColor] = React.useState<string>('#aaa')
+  const [buttonColor, setButtonColor] = React.useState<string>("#aaa");
   const [gradient, setGradient] = React.useState<string>(
     buildGradient([84, 46, 113], [226, 109, 92])
   );
 
   const transitions = useTransition(result, null, {
     from: {
-      position: 'absolute',
+      position: "absolute",
       transform: "scale(0.9) translate3d(0, 150px, 0)",
       maxWidth: 640,
-      width: '100%',
+      width: "100%"
     },
     enter: {
       opacity: 1,
@@ -87,9 +82,7 @@ const App: React.FC = () => {
   React.useEffect(() => {
     setValid(validateInput(value));
     const query = qs.stringify({ q: value });
-    const url = `${window.location.protocol}//${window.location.host}${
-      window.location.pathname
-    }?${query}`;
+    const url = `${window.location.protocol}//${window.location.host}${window.location.pathname}?${query}`;
     window.history.pushState({ path: url }, "", url);
   }, [value]);
 
@@ -105,7 +98,9 @@ const App: React.FC = () => {
         .from(result.cover)
         .getPalette()
         .then(palette => {
-          setButtonColor(palette.DarkMuted ? palette.DarkMuted.getHex() : '#aaa')
+          setButtonColor(
+            palette.DarkMuted ? palette.DarkMuted.getHex() : "#aaa"
+          );
           setGradient(
             buildGradient(
               palette.Muted ? palette.Muted.getRgb() : [226, 109, 92],
@@ -129,13 +124,13 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <Background
+    <Flex
       width={1}
       flexDirection="column"
       alignItems="center"
       height="100vh"
       py={[32, 120, 240]}
-      gradient={gradient}
+      bg={gradient}
     >
       <div style={{ maxWidth: 640, width: "100%" }}>
         {transitions.map(({ item, props, key }) =>
@@ -145,11 +140,17 @@ const App: React.FC = () => {
             </animated.div>
           ) : (
             <animated.div key={key} style={props}>
-              <Flex mt={[5, 0]} mx={[2, 0]} as="form" onSubmit={onSubmit} flexDirection={['column', 'row']}>
+              <Flex
+                mt={[5, 0]}
+                mx={[2, 0]}
+                as="form"
+                onSubmit={onSubmit}
+                flexDirection={["column", "row"]}
+              >
                 <Input value={value} onChange={setValue} />
                 <Button
                   disabled={!isValid || loading}
-                  borderRadius={99}
+                  sx={{ borderRadius: 99 }}
                   bg={isValid ? buttonColor : "#aaa"}
                   color={isValid ? "#fff" : "#444"}
                   py={3}
@@ -171,7 +172,7 @@ const App: React.FC = () => {
           )
         )}
       </div>
-    </Background>
+    </Flex>
   );
 };
 

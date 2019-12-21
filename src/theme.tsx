@@ -1,11 +1,12 @@
-import { createGlobalStyle } from "styled-components";
+import * as React from "react";
+import { Global, css } from "@emotion/core";
 
 export const theme = {
   breakpoints: ["40em", "52em", "64em"],
   fontSizes: [12, 14, 16, 20, 24, 32, 48, 64],
   colors: {
     primary: "#542E71",
-    orange: '#E26D5C',
+    orange: "#E26D5C",
     blue: "#07c",
     lightgray: "#f6f6ff"
   },
@@ -20,17 +21,21 @@ export const theme = {
   }
 };
 
-export const GlobalStyle = createGlobalStyle`
-  * {
-    font-family: ${theme.fonts.sans};
-  }
+export const GlobalStyle: React.FC = () => (
+  <Global
+    styles={css`
+      * {
+        font-family: ${theme.fonts.sans};
+      }
 
-  body {
-    min-height: 100vh;
-    margin: 0;
-  }
+      body {
+        min-height: 100vh;
+        margin: 0;
+      }
 
-  pre {
-    font-family: ${theme.fonts.mono};
-  }
-`;
+      pre {
+        font-family: ${theme.fonts.mono};
+      }
+    `}
+  />
+);
